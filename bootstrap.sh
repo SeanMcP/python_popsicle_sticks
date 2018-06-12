@@ -1,5 +1,8 @@
 #!/bin/sh
-# Flask set up
+
+# Enables hot reloading
+export FLASK_DEBUG=1
+
 export FLASK_APP=./api/index.py
 
 # Activates virtual environment; finds and executes dependencies
