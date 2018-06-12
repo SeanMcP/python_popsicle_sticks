@@ -1,0 +1,18 @@
+{
+    "sections": [
+        {
+            "description": "Chemistry and Geology",
+            "id": "section_0000",
+            "title": "Science"
+        }
+    ],
+    "students": [
+        {
+            "id": "student_0000",
+            "current_level": "medium",
+            "gender": "Male",
+            "name": "Sean M.",
+            "section_id": "section_0000"
+        }
+    ]
+}
