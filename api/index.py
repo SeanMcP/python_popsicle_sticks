@@ -10,6 +10,13 @@ def hello_world():
 
 @app.route('/students')
 def get_students():
-    with open('data.json') as data:
-        print(json.load(data))
     return 'Students'
+
+# Utility functions
+def read_json():
+    with open('./api/data.json') as raw:
+        data = json.load(raw)
+    return data 
+
+def get_data(key):
+    return read_json()[key]
