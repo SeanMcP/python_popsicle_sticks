@@ -22,14 +22,22 @@ def get_list_students():
     res = get_data('students')
     return jsonify(res)
 
+@app.route('/students/name')
+def get_list_student_names():
+    students = get_data('students')
+    res = []
+    for student in students:
+        res.append(student['name'])
+    return jsonify(res)
+
 @app.route('/student/<id>')
 def get_student_by_id(id):
-    data = get_data('students')
-    for student in data:
+    students = get_data('students')
+    for student in students:
         if student['id'] == id:
             return jsonify(student)
         else:
-            return 'No student found'
+            return 'None found'
 
 # Utility functions
 def read_json():
