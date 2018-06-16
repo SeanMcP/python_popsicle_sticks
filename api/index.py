@@ -37,6 +37,15 @@ def post_add_section():
             json.dump(sections, file)
         return 'Success'
 
+@app.route('/section/<id>')
+def get_section_by_id(id):
+    sections = read_file('sections')
+    for section in sections:
+        if section['id'] == id:
+            return jsonify(section)
+        else:
+            return 'None found'
+
 # Student routes
 
 @app.route('/students')
