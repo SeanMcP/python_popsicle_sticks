@@ -1,6 +1,7 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 # from utils import shuffle
 import json
+import uuid
 
 app = Flask(__name__)
 
@@ -12,8 +13,22 @@ def welcome():
 
 @app.route('/sections')
 def get_list_sections():
-    res = get_data('sections')
+    res = read_file('sections')
     return jsonify(res)
+
+@app.route('/section', methods=['POST'])
+def post_add_section():
+    if request.method == 'POST':
+        section = {
+            'id': gen_id(),
+            'level': request.form['level'],
+            'title': request.form['title']
+        }
+        sections = read_file('sections')
+        with open('./api/sections.json', 'w') as file:
+            sections.append(section)
+            json.dump(sections, file)
+        return 'Success'
 
 # Student routes
 
@@ -43,6 +58,13 @@ def get_student_by_id(id):
 def read_json():
     with open('./api/data.json') as raw:
         return json.load(raw)
+
+def read_file(file_name):
+    with open(f'./api/{file_name}.json') as raw:
+        return json.load(raw)
+
+def gen_id():
+    return str(uuid.uuid4())
 
 def get_data(key):
     return read_json()[key]

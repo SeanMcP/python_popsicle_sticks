@@ -1,11 +1,4 @@
 {
-    "sections": [
-        {
-            "description": "Chemistry and Geology",
-            "id": "C0000",
-            "title": "Science"
-        }
-    ],
     "students": [
         {
             "id": "S0000",
