@@ -37,13 +37,21 @@ def get_list_students():
     res = read_file('students')
     return jsonify(res)
 
-
 @app.route('/students/name')
 def get_list_student_names():
     students = read_file('students')
     res = []
     for student in students:
         res.append(student['name'])
+    return jsonify(res)
+
+@app.route('/students/section/<section_id>')
+def get_list_students_by_section(section_id):
+    students = read_file('students')
+    res = []
+    for student in students:
+        if student['section_id'] == section_id:
+            res.append(student)
     return jsonify(res)
 
 @app.route('/student', methods=['POST'])
