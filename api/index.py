@@ -43,8 +43,7 @@ def get_section_by_id(id):
     for section in sections:
         if section['id'] == id:
             return jsonify(section)
-        else:
-            return 'None found'
+    return 'None found'
 
 # Student routes
 
@@ -96,16 +95,32 @@ def post_add_student():
             json.dump(levels, file)
         return 'Success'
 
-@app.route('/student/<id>')
-def get_student_by_id(id):
+@app.route('/student/<id>', methods=['GET', 'POST'])
+def student_by_id(id):
     students = read_file('students')
-    for student in students:
-        if student['id'] == id:
-            return jsonify(student)
-        else:
-            return 'None found'
+    if request.method == 'GET':
+        for student in students:
+            if student['id'] == id:
+                return jsonify(student)
+        return 'None found'
+    elif request.method == 'POST':
+        i = find_index_by_key_value(students, 'id', id)
+        student = students[i]
+        del students[i]
+        for key in request.form:
+            student[key] = request.form[key]
+        students.append(student)
+        with open('./data/students.json', 'w') as file:
+            json.dump(students, file)
+        return 'Success'
 
 # Utility functions
+def find_index_by_key_value(list, key, value):
+    for i, item in enumerate(list):
+        if item[key] == value:
+            return i
+    return None
+
 def read_file(file_name):
     with open(f'./data/{file_name}.json') as raw:
         return json.load(raw)
