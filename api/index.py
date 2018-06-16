@@ -57,9 +57,10 @@ def get_list_students_by_section(section_id):
 @app.route('/student', methods=['POST'])
 def post_add_student():
     if request.method == 'POST':
+        student_id = gen_id()
         student = {
             'gender': request.form['gender'],
-            'id': gen_id(),
+            'id': student_id,
             'name': request.form['name'],
             'section_id': request.form['section_id']
         }
@@ -67,6 +68,16 @@ def post_add_student():
         with open('./data/students.json', 'w') as file:
             students.append(student)
             json.dump(students, file)
+
+        level = {
+            'current_level': request.form['current_level'],
+            'section_id': request.form['section_id'],
+            'student_id': student_id
+        }
+        levels = read_file('levels')
+        with open('./data/levels.json', 'w') as file:
+            levels.append(level)
+            json.dump(levels, file)
         return 'Success'
 
 @app.route('/student/<id>')
