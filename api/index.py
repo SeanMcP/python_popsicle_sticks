@@ -7,7 +7,14 @@ app = Flask(__name__)
 
 @app.route('/')
 def welcome():
-    return 'Welcome to the Popsicle Sticks API, powered by Python!'
+    return 'Welcome to the Popsicle Sticks API, powered by Python and Flask!'
+
+# Level routes
+@app.route('/levels/student/<student_id>')
+def get_levels_by_student(student_id):
+    levels = read_file('levels')
+    res = list(filter(lambda level: level['student_id'] == student_id, levels))
+    return jsonify(res)
 
 # Section routes
 
