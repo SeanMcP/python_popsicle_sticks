@@ -18,6 +18,7 @@ This is a Python/Flask API for the [Popsicle Sticks app](https://github.com/Sean
 - `GET /students/section/<section_id>` - Returns an array of students for a given section
 - `POST /student` - Adds a new student. Required fields: `current_level`, `gender`, `name`, `section_id`
 - `GET /student/<id>` - Returns a student by id
+- `POST /student/<id>` - Updates existing student. Optional fields: `gender`, `name`
 
 
 This project takes some inspiration from [Auth0's](https://auth0.com) ["Developing RESTful APIs with Python and Flask"](https://auth0.com/blog/developing-restful-apis-with-python-and-flask/) tutorial.

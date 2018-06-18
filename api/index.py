@@ -13,9 +13,14 @@ def welcome():
 @app.route('/levels/student/<student_id>')
 def get_levels_by_student(student_id):
     levels = read_file('levels')
-    res = list(filter(lambda level: level['student_id'] == student_id, levels))
+    levels_by_student = list(filter(lambda level: level['student_id'] == student_id, levels))
+    sections = read_file('sections');
+    for level in levels_by_student:
+        for section in sections:
+            if section['id'] == level['section_id']:
+                level['section_title'] = section['title']
     
-    return jsonify(res)
+    return jsonify(levels_by_student)
 
 # Section routes
 
