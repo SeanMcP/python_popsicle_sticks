@@ -42,7 +42,7 @@ def post_add_section():
         sections.append(section)
         write_data_to_file(sections, 'sections')
     
-        return RESPONSE.SUCCESS
+        return RESPONSE['SUCCESS']
 
 @app.route('/section/<id>')
 def get_section_by_id(id):
@@ -51,7 +51,7 @@ def get_section_by_id(id):
         if section['id'] == id:
             return jsonify(section)
     
-    return RESPONSE.NONE
+    return RESPONSE['NONE']
 
 # Student routes
 
@@ -103,7 +103,7 @@ def post_add_student():
         levels.append(level)
         write_data_to_file(levels, 'levels')
         
-        return RESPONSE.SUCCESS
+        return RESPONSE['SUCCESS']
 
 @app.route('/student/<id>', methods=['GET', 'POST'])
 def get_student_by_id(id):
@@ -113,7 +113,7 @@ def get_student_by_id(id):
             if student['id'] == id:
                 return jsonify(student)
         
-        return RESPONSE.NONE
+        return RESPONSE['NONE']
 
     elif request.method == 'POST':
         i = find_index_by_key_value(students, 'id', id)
@@ -124,19 +124,29 @@ def get_student_by_id(id):
         students.append(student)
         write_data_to_file(students, 'students')
 
-        return RESPONSE.SUCCESS
+        return RESPONSE['SUCCESS']
 
-@app.route('/student/<student_id>/section/<section_id>', methods=['POST'])
+@app.route('/student/<student_id>/section/<section_id>')
 def add_student_to_section(student_id, section_id):
-    if request.method == 'POST':
-        students = read_file('students')
-        for student in students:
-            if student['id'] == student_id:
-                student['section_id'].append(section_id)
-                write_data_to_file(students, 'students')
-                return RESPONSE.SUCCESS
-            else:
-                return RESPONSE.NONE
+    students = read_file('students')
+    for student in students:
+        if student['id'] == student_id:
+            student['section_id'].append(section_id)
+            write_data_to_file(students, 'students')
+            return RESPONSE['SUCCESS']
+        else:
+            return RESPONSE['NONE']
+
+@app.route('/student/<student_id>/remove/section/<section_id>')
+def remove_student_from_section(student_id, section_id):
+    students = read_file('students')
+    for student in students:
+        if student['id'] == student_id:
+            student['section_id'].remove(section_id)
+            write_data_to_file(students, 'students')
+            return RESPONSE['SUCCESS']
+        else:
+            return RESPONSE['NONE']
 
 # Utilities
 def find_index_by_key_value(list, key, value):
