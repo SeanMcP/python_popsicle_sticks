@@ -75,7 +75,7 @@ def get_list_students_by_section(section_id):
     students = read_file('students')
     res = []
     for student in students:
-        if student['section_id'] == section_id:
+        if section_id in student['section_id']:
             res.append(student)
     
     return jsonify(res)
@@ -88,7 +88,7 @@ def post_add_student():
             'gender': request.form['gender'],
             'id': student_id,
             'name': request.form['name'],
-            'section_id': request.form['section_id']
+            'section_id': list(request.form['section_id'])
         }
         students = read_file('students')
         students.append(student)
