@@ -80,6 +80,16 @@ def get_list_students_by_section(section_id):
     
     return jsonify(res)
 
+@app.route('/students/section/none')
+def get_list_students_without_section():
+    students = read_file('students')
+    res = []
+    for student in students:
+        if not student['section_id']:
+            res.append(student)
+    
+    return jsonify(res)
+
 @app.route('/student', methods=['POST'])
 def post_add_student():
     if request.method == 'POST':
