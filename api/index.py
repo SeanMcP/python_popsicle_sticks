@@ -42,7 +42,7 @@ def post_add_section():
         sections.append(section)
         write_data_to_file(sections, 'sections')
     
-        return 'Success'
+        return RESPONSE.SUCCESS
 
 @app.route('/section/<id>')
 def get_section_by_id(id):
@@ -51,7 +51,7 @@ def get_section_by_id(id):
         if section['id'] == id:
             return jsonify(section)
     
-    return 'None found'
+    return RESPONSE.NONE
 
 # Student routes
 
@@ -103,17 +103,17 @@ def post_add_student():
         levels.append(level)
         write_data_to_file(levels, 'levels')
         
-        return 'Success'
+        return RESPONSE.SUCCESS
 
 @app.route('/student/<id>', methods=['GET', 'POST'])
-def student_by_id(id):
+def get_student_by_id(id):
     students = read_file('students')
     if request.method == 'GET':
         for student in students:
             if student['id'] == id:
                 return jsonify(student)
         
-        return 'None found'
+        return RESPONSE.NONE
 
     elif request.method == 'POST':
         i = find_index_by_key_value(students, 'id', id)
@@ -124,9 +124,21 @@ def student_by_id(id):
         students.append(student)
         write_data_to_file(students, 'students')
 
-        return 'Success'
+        return RESPONSE.SUCCESS
 
-# Utility functions
+@app.route('/student/<student_id>/section/<section_id>', methods=['POST'])
+def add_student_to_section(student_id, section_id):
+    if request.method == 'POST':
+        students = read_file('students')
+        for student in students:
+            if student['id'] == student_id:
+                student['section_id'].append(section_id)
+                write_data_to_file(students, 'students')
+                return RESPONSE.SUCCESS
+            else:
+                return RESPONSE.NONE
+
+# Utilities
 def find_index_by_key_value(list, key, value):
     for i, item in enumerate(list):
         if item[key] == value:
@@ -143,3 +155,9 @@ def read_file(file_name):
 def write_data_to_file(data, file_name):
     with open(f'./data/{file_name}.json', 'w') as file:
         json.dump(data, file)
+
+RESPONSE = {
+    'FAIL': 'Failed to execute',
+    'NONE': 'None found',
+    'SUCCESS': 'Success'
+}
