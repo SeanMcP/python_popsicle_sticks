@@ -10,8 +10,9 @@ This is a Python/Flask API for the [Popsicle Sticks app](https://github.com/Sean
 - `GET /levels/student/<student_id>` - Returns an array of levels for a given student
 #### Section
 - `GET /sections` - Returns an array of all sections
-- `POST /section` - Adds a new section. Required fields: `title`, `level`
+- `POST /section` - Adds a new section. Required fields: `stage`, `title`
 - `GET /section/<id>` - Returns a section by id
+- `POST /section/<id>` - Updates existing section. Optional fields: `stage`, `title`
 #### Student
 - `GET /students` - Returns an array of all students
 - `GET /students/name` - Returns an array of student name strings

@@ -35,23 +35,33 @@ def post_add_section():
     if request.method == 'POST':
         section = {
             'id': gen_id(),
-            'level': request.form['level'],
+            'stage': request.form['stage'],
             'title': request.form['title']
         }
         sections = read_file('sections')
         sections.append(section)
         write_data_to_file(sections, 'sections')
     
-        return RESPONSE['SUCCESS']
+        return RES['SUCCESS']
 
-@app.route('/section/<id>')
+@app.route('/section/<id>', methods=['GET', 'POST'])
 def get_section_by_id(id):
     sections = read_file('sections')
-    for section in sections:
-        if section['id'] == id:
-            return jsonify(section)
-    
-    return RESPONSE['NONE']
+    if request.method == 'GET':
+        for section in sections:
+            if section['id'] == id:
+                return jsonify(section)
+            else:
+                return RES['NONE']
+
+    elif request.method == 'POST':
+        i = find_index_by_key_value(sections, 'id', id)
+        section = sections[i]
+        for key in request.form:
+            section[key] = request.form[key]
+        write_data_to_file(sections, 'sections')
+
+        return RES['SUCCESS']
 
 # Student routes
 
@@ -113,7 +123,7 @@ def post_add_student():
         levels.append(level)
         write_data_to_file(levels, 'levels')
         
-        return RESPONSE['SUCCESS']
+        return RES['SUCCESS']
 
 @app.route('/student/<id>', methods=['GET', 'POST'])
 def get_student_by_id(id):
@@ -123,18 +133,16 @@ def get_student_by_id(id):
             if student['id'] == id:
                 return jsonify(student)
         
-        return RESPONSE['NONE']
+        return RES['NONE']
 
     elif request.method == 'POST':
         i = find_index_by_key_value(students, 'id', id)
         student = students[i]
-        del students[i]
         for key in request.form:
             student[key] = request.form[key]
-        students.append(student)
         write_data_to_file(students, 'students')
 
-        return RESPONSE['SUCCESS']
+        return RES['SUCCESS']
 
 @app.route('/student/<student_id>/section/<section_id>')
 def add_student_to_section(student_id, section_id):
@@ -143,9 +151,9 @@ def add_student_to_section(student_id, section_id):
         if student['id'] == student_id:
             student['section_id'].append(section_id)
             write_data_to_file(students, 'students')
-            return RESPONSE['SUCCESS']
+            return RES['SUCCESS']
         else:
-            return RESPONSE['NONE']
+            return RES['NONE']
 
 @app.route('/student/<student_id>/remove/section/<section_id>')
 def remove_student_from_section(student_id, section_id):
@@ -154,9 +162,9 @@ def remove_student_from_section(student_id, section_id):
         if student['id'] == student_id:
             student['section_id'].remove(section_id)
             write_data_to_file(students, 'students')
-            return RESPONSE['SUCCESS']
+            return RES['SUCCESS']
         else:
-            return RESPONSE['NONE']
+            return RES['NONE']
 
 # Utilities
 def find_index_by_key_value(list, key, value):
@@ -176,7 +184,7 @@ def write_data_to_file(data, file_name):
     with open(f'./data/{file_name}.json', 'w') as file:
         json.dump(data, file)
 
-RESPONSE = {
+RES = {
     'FAIL': 'Failed to execute',
     'NONE': 'None found',
     'SUCCESS': 'Success'
