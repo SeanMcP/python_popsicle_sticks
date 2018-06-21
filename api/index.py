@@ -10,6 +10,7 @@ def welcome():
     return 'Welcome to the Popsicle Sticks API, powered by Python and Flask!'
 
 # Level routes
+
 @app.route('/levels/student/<student_id>')
 def get_levels_by_student(student_id):
     levels = read_file('levels')
@@ -21,6 +22,18 @@ def get_levels_by_student(student_id):
                 level['section_title'] = section['title']
     
     return jsonify(levels_by_student)
+
+@app.route('/level/student/<student_id>/section/<section_id>', methods=['POST'])
+def update_level(student_id, section_id):
+    levels = read_file('levels')
+    for level in levels:
+        if level['student_id'] == student_id and level['section_id'] == section_id:
+            level['current_level'] = request.form['current_level']
+            write_data_to_file(levels, 'levels')
+
+            return RES['SUCCESS']
+    
+    return RES['NONE']
 
 # Section routes
 
