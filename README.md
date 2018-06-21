@@ -13,6 +13,7 @@ This is a Python/Flask API for the [Popsicle Sticks app](https://github.com/Sean
 - `POST /section` - Adds a new section. Required fields: `stage`, `title`
 - `GET /section/<id>` - Returns a section by id
 - `POST /section/<id>` - Updates existing section. Optional fields: `stage`, `title`
+- `GET /section/remove/<id>` - Removes section from sections, students, and levels
 #### Student
 - `GET /students` - Returns an array of all students
 - `GET /students/name` - Returns an array of student name strings

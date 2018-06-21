@@ -63,6 +63,31 @@ def get_section_by_id(id):
 
         return RES['SUCCESS']
 
+@app.route('/section/remove/<id>')
+def remove_section_by_id(id):
+    sections = read_file('sections')
+    i = find_index_by_key_value(sections, 'id', id)
+    if i:
+        # Remove section
+        del sections[i]
+        write_data_to_file(sections, 'sections')
+
+        # Remove section from students
+        students = read_file('students')
+        for student in students:
+            if id in student['section_id']:
+                student['section_id'].remove(id)
+                write_data_to_file(students, 'students')
+
+        # Remove levels
+        levels = read_file('levels')
+        levels = list(filter(lambda level: level['section_id'] != id, levels))
+        write_data_to_file(levels, 'levels');
+
+        return RES['SUCCESS']
+
+    return RES['NONE']
+
 # Student routes
 
 @app.route('/students')
