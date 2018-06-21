@@ -191,6 +191,24 @@ def remove_student_from_section(student_id, section_id):
         else:
             return RES['NONE']
 
+@app.route('/student/remove/<id>')
+def remove_student_by_id(id):
+    students = read_file('students')
+    i = find_index_by_key_value(students, 'id', id)
+    if i:
+        # Remove student
+        del students[i]
+        write_data_to_file(students, 'students')
+
+        # Remove levels
+        levels = read_file('levels')
+        levels = list(filter(lambda level: level['student_id'] != id, levels))
+        write_data_to_file(levels, 'levels');
+
+        return RES['SUCCESS']
+
+    return RES['NONE']
+
 # Utilities
 def find_index_by_key_value(list, key, value):
     for i, item in enumerate(list):

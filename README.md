@@ -24,6 +24,7 @@ This is a Python/Flask API for the [Popsicle Sticks app](https://github.com/Sean
 - `POST /student/<id>` - Updates existing student. Optional fields: `gender`, `name`
 - `GET /student/<student_id>/section/<section_id>` - Adds student to existing section
 - `GET /student/<student_id>/remove/section/<section_id>` - Removes student from section
+- `GET /student/remove/<id>` - Removes student from students and levels
 
 
 This project takes some inspiration from [Auth0's](https://auth0.com) ["Developing RESTful APIs with Python and Flask"](https://auth0.com/blog/developing-restful-apis-with-python-and-flask/) tutorial.
