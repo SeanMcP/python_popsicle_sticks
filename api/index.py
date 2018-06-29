@@ -11,8 +11,11 @@ def welcome():
 
 # Level routes
 
-@app.route('/levels/student/<student_id>')
-def get_levels_by_student(student_id):
+@app.route('/levels')
+def get_levels_by_student():
+    student_id = request.args.get('student')
+    if not student_id:
+        return RES['ERROR']
     levels = read_file('levels')
     levels_by_student = list(filter(lambda level: level['student_id'] == student_id, levels))
     sections = read_file('sections');
@@ -23,8 +26,12 @@ def get_levels_by_student(student_id):
     
     return jsonify(levels_by_student)
 
-@app.route('/level/student/<student_id>/section/<section_id>', methods=['POST'])
-def update_level(student_id, section_id):
+@app.route('/level', methods=['POST'])
+def update_level():
+    student_id = request.args.get('student')
+    section_id = request.args.get('section')
+    if not student_id or not section_id:
+        return RES['ERROR']
     levels = read_file('levels')
     for level in levels:
         if level['student_id'] == student_id and level['section_id'] == section_id:
@@ -121,6 +128,8 @@ def get_list_student_names():
 @app.route('/students/section/<section_id>')
 def get_list_students_by_section(section_id):
     students = read_file('students')
+    # TODO: Add current_level to student dict
+    # TODO: Change this vvvv to a filter
     res = []
     for student in students:
         if section_id in student['section_id']:
@@ -241,6 +250,7 @@ def write_data_to_file(data, file_name):
         json.dump(data, file)
 
 RES = {
+    'ERROR': 'Incorrect parameters',
     'FAIL': 'Failed to execute',
     'NONE': 'None found',
     'SUCCESS': 'Success'
